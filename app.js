@@ -19,6 +19,10 @@ const itemsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const listSchema = new mongoose.Schema({
@@ -119,6 +123,41 @@ app.post("/delete", (req, res) => {
 app.post("/search", (req, res) => {
   const search = req.body.search;
   res.redirect("/" + search);
+});
+
+app.post("/complete", (req, res) => {
+  let checked = req.body.completed;
+  let id = req.body.id;
+  let list = req.body.listName;
+  if (list === date.getDate()) {
+    if (checked === "on") {
+      Item.findByIdAndUpdate(id, { completed: true }).catch((err) => {
+        console.log(err);
+      });
+    } else {
+      Item.findByIdAndUpdate(id, { completed: false }).catch((err) => {
+        console.log(err);
+      });
+    }
+    res.redirect("/");
+  } else {
+    if (checked === "on") {
+      List.findOneAndUpdate(
+        { name: list, "items._id": id },
+        { $set: { "items.$.completed": true } }
+      ).catch((err) => {
+        console.log(err);
+      });
+    } else {
+      List.findOneAndUpdate(
+        { name: list, "items._id": id },
+        { $set: { "items.$.completed": false } }
+      ).catch((err) => {
+        console.log(err);
+      });
+    }
+    res.redirect("/" + list);
+  }
 });
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));

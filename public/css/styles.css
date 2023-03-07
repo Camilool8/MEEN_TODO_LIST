@@ -74,6 +74,12 @@ input:checked + p {
   color: #bad7e9;
 }
 
+.checked {
+  text-decoration: line-through;
+  text-decoration-color: #eb455f;
+  color: #bad7e9 !important;
+}
+
 input[type="checkbox"] {
   margin: 20px;
   height: 30px;
@@ -92,6 +98,13 @@ p {
 form {
   text-align: center;
   margin-left: 20px;
+}
+
+.complete-form {
+  height: auto;
+  width: 60px;
+  display: flex;
+  margin-left: 0;
 }
 
 .delete-form {
